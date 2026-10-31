@@ -32,3 +32,59 @@ $('pause').addEventListener('click',()=>$('video').pause());
 $('restart').addEventListener('click',()=>{$('video').currentTime=0;play();});
 $('video').addEventListener('error',()=>{$('player-status').textContent='영상을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해주세요.';});
 window.addEventListener('hashchange',route);route();
+
+// 브랜드별 순서 사진 표시
+function showStepPhotos() {
+  document.getElementById('step-photos')?.remove();
+
+  const brand = window.SMART_SENIOR_VIDEOS.find(
+    item => '#' + item.id === location.hash
+  );
+  if (!brand?.images?.length) return;
+
+  const section = document.createElement('section');
+  section.id = 'step-photos';
+  section.style.margin = '40px 0';
+
+  const title = document.createElement('h2');
+  title.textContent = '사진으로 천천히 따라 하기';
+  section.append(title);
+
+  const guide = document.createElement('p');
+  guide.textContent = '사진을 누르면 크게 볼 수 있어요.';
+  section.append(guide);
+
+  brand.images.forEach((src, index) => {
+    const figure = document.createElement('figure');
+    figure.style.margin = '32px 0';
+
+    const caption = document.createElement('h3');
+    caption.textContent = `${index + 1}단계`;
+
+    const link = document.createElement('a');
+    link.href = src;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.setAttribute(
+      'aria-label',
+      `${index + 1}단계 사진 크게 보기 (새 탭)`
+    );
+
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `${brand.name} 주문 안내 ${index + 1}단계`;
+    img.loading = 'lazy';
+    img.style.cssText =
+      'display:block;width:100%;max-width:700px;' +
+      'height:auto;border:2px solid #dedbd3;border-radius:16px';
+
+    link.append(img);
+    figure.append(caption, link);
+    section.append(figure);
+  });
+
+  document.getElementById('lesson').append(section);
+}
+
+window.addEventListener('hashchange', showStepPhotos);
+showStepPhotos();
