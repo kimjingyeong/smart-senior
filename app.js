@@ -88,3 +88,22 @@ function showStepPhotos() {
 
 window.addEventListener('hashchange', showStepPhotos);
 showStepPhotos();
+
+// 꽃 친구 안내 상자를 영상 아래로 이동
+function placeFlowerGuide() {
+  const guide = document.querySelector('.hero');
+  const lesson = document.getElementById('lesson');
+  const player = document.getElementById('player-area');
+  const home = document.getElementById('home');
+
+  if (!guide || !lesson || !player || !home) return;
+
+  if (!lesson.hidden) {
+    player.insertAdjacentElement('afterend', guide);
+  } else {
+    home.prepend(guide);
+  }
+}
+
+window.addEventListener('hashchange', placeFlowerGuide);
+placeFlowerGuide();
